@@ -19,16 +19,7 @@ jobs:
         include:
         - os: ubuntu-latest
           install-deps: |
-             sudo apt-get install -y libx11-dev libxext-dev libxft-dev libxinerama-dev libxcursor-dev libxrender-dev libxfixes-dev libgl1-mesa-dev libglu1-mesa-dev libxtst-dev nasm libstdc++-6-dev gcc-6 g++-6
-             sudo apt-get remove gcc-7 g++-7 gcc-9 g++-9
-             sudo update-alternatives --install /usr/bin/gcc gcc $(which gcc-6) 100
-             sudo update-alternatives --set gcc $(which gcc-6)
-             sudo update-alternatives --install /usr/bin/g++ g++ $(which g++-6) 100
-             sudo update-alternatives --set g++ $(which g++-6)
-             sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 100
-             sudo update-alternatives --set cc /usr/bin/gcc
-             sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 100
-             sudo update-alternatives --set c++ /usr/bin/g++
+             sudo apt-get install -y libx11-dev libxext-dev libxft-dev libxinerama-dev libxcursor-dev libxrender-dev libxfixes-dev libgl1-mesa-dev libglu1-mesa-dev libxtst-dev nasm
              cargo install cargo-deb
           build-cmd: cargo deb
           package-files: |
@@ -59,6 +50,8 @@ jobs:
           pkg-cmd: cd target/release/ && 7z a Windows.zip weylus.exe
 
     steps:
+    - uses: docker://rust:stretch
+      if: runner.os == "Linux"
     - uses: actions/checkout@v2
     - uses: actions/cache@v2
       with:
